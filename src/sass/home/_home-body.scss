@@ -1,0 +1,89 @@
+.films {
+  padding: 60px 0;
+}
+
+.film-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+
+  @media screen and(min-width: 768px) {
+    gap: 32px;
+  }
+
+  @media screen and(min-width: 1280px) {
+    column-gap: 16px;
+    row-gap: 32px;
+  }
+}
+
+.film-item {
+  position: relative;
+  width: 100%;
+
+  @media screen and(min-width: 768px) {
+    flex-basis: calc((100% - 32px) / 2);
+  }
+
+  @media screen and(min-width: 1280px) {
+    flex-basis: calc((100% - 32px) / 3);
+  }
+}
+.title-film {
+  text-transform: uppercase;
+  color: var(--second-color);
+}
+
+.title-film,
+.text {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.info-film {
+  color: var(--second-orange-color);
+}
+
+.poster {
+  width: 100%;
+  display: block;
+  transition: transform 300ms linear;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.thumb {
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.rating {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-color: var(--second-orange-color);
+  color: var(--main-white-color);
+  border-bottom-right-radius: 5px;
+  padding: 3px 12px;
+
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 1.16;
+}
+
+.film-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.film-data {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  flex: 0 1 70px;
+}

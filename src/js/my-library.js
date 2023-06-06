@@ -1,0 +1,161 @@
+import { getWatchedFilms } from './api';
+import { click, addDarkClassToHTML } from './theme';
+import { gsap } from 'gsap';
+import {
+  funcAnimeLogo,
+  funcAnimeHeart,
+  funcAnimeHaederLib,
+} from './SVG-animation';
+import {
+  onClickWatchedBtn,
+  onClickQueueBtn,
+  onClickClearAll,
+} from './buttons-my-library';
+import { stuffOnFilmCard } from './film-modal';
+import { getVideoInfo, playVideoTrailer } from './trailer';
+import { showPreloader, hidePreloader } from './loader';
+import { openTeamModal } from './team-modal';
+import { refs } from './refs';
+
+const dataWatchedCards = JSON.parse(localStorage.getItem('watched')) || [];
+const dataQueueCards = JSON.parse(localStorage.getItem('queue')) || [];
+
+hidePreloader();
+
+export function statusWraper(nameList) {
+  const test = JSON.parse(localStorage.getItem(`${nameList}`)) || [];
+
+  if (!localStorage.getItem(`${nameList}`) || test.length < 1) {
+    if (localStorage.getItem('theme') === 'dark-theme') {
+      refs.darkWrapper.style.display = 'flex';
+      refs.wraperMyLib.style.display = 'none';
+    } else {
+      refs.darkWrapper.style.display = 'none';
+      refs.wraperMyLib.style.display = 'flex';
+    }
+  } else {
+    if (localStorage.getItem('theme') === 'dark-theme') {
+      refs.darkWrapper.style.display = 'none';
+    } else {
+      refs.wraperMyLib.style.display = 'none';
+    }
+  }
+}
+
+onCardWatch();
+
+export async function onCardWatch() {
+  showPreloader();
+  refs.gallery.innerHTML = '';
+  statusWraper('watched');
+  let markup = '';
+  for (const idFilm of dataWatchedCards) {
+    const oneFilmCard = await getWatchedFilms(idFilm);
+    let release = Number.parseInt(
+      oneFilmCard.release_date || oneFilmCard.first_air_date
+    );
+    const mainPoster = `https://image.tmdb.org/t/p/w300${oneFilmCard.poster_path}`;
+    const posterFake = `https://sd.keepcalms.com/i-w600/keep-calm-poster-not-found.jpg`;
+    let genreMarkup = [];
+
+    oneFilmCard.genres.forEach(element => {
+      genreMarkup.push(element.name);
+    });
+
+    markup += ` <li class ="film-item">
+                <a id='${oneFilmCard.id}' class="film-card" href="#">
+                  <div class='thumb'>
+                  <img
+                      class = 'poster'
+                      src= "${
+                        oneFilmCard.poster_path ? mainPoster : posterFake
+                      }"
+                      alt="${oneFilmCard.title}"
+                      loading="lazy"
+                    /></div>
+                    <div class='film-data'>
+                      <h2 class="title-film">${oneFilmCard.title}</h2>
+                      <p class="text">
+                        <span class='info-film'>${genreMarkup.join(
+                          ', '
+                        )} | ${release}</span>
+                        <span class ="rating">IMDB:<br>${oneFilmCard.vote_average.toFixed(
+                          1
+                        )}</span>
+                      </p>
+                    </div>
+                  </a>
+              </li>`;
+  }
+  refs.gallery.insertAdjacentHTML('beforeend', markup);
+  hidePreloader();
+}
+
+export async function onCardQueue() {
+  showPreloader();
+  refs.gallery.innerHTML = '';
+  statusWraper('queue');
+  let markup = '';
+  for (const idFilm of dataQueueCards) {
+    const oneFilmCard = await getWatchedFilms(idFilm);
+    let release = Number.parseInt(
+      oneFilmCard.release_date || oneFilmCard.first_air_date
+    );
+    const mainPoster = `https://image.tmdb.org/t/p/w300${oneFilmCard.poster_path}`;
+    const posterFake = `https://sd.keepcalms.com/i-w600/keep-calm-poster-not-found.jpg`;
+    let genreMarkup = [];
+
+    oneFilmCard.genres.forEach(element => {
+      genreMarkup.push(element.name);
+    });
+
+    markup += ` <li class ="film-item">
+              <a id='${oneFilmCard.id}' class="film-card" href="#">
+                <div class='thumb'>
+                <img
+                    class = 'poster'
+                    src= "${oneFilmCard.poster_path ? mainPoster : posterFake}"
+                    alt="${oneFilmCard.title}"
+                    loading="lazy"
+                  /></div>
+                  <div class='film-data'>
+                    <h2 class="title-film">${oneFilmCard.title}</h2>
+                    <p class="text">
+                      <span class='info-film'>${genreMarkup.join(
+                        ', '
+                      )} | ${release}</span>
+                      <span class ="rating">IMDB:<br>${oneFilmCard.vote_average.toFixed(
+                        1
+                      )}</span>
+                    </p>
+                  </div>
+                </a>
+            </li>`;
+  }
+  refs.gallery.insertAdjacentHTML('beforeend', markup);
+  hidePreloader();
+}
+
+const displayButton = () => {
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 100) {
+      refs.button.style.display = 'block';
+    } else {
+      refs.button.style.display = 'none';
+    }
+  });
+};
+
+const scrollToTop = () => {
+  refs.button.addEventListener('click', () => {
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
+  });
+};
+
+displayButton();
+scrollToTop();
+addDarkClassToHTML();

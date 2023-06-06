@@ -1,0 +1,16 @@
+@import './components/container';
+@import './components/pagination';
+@import './components/theme';
+@import './base/variables';
+@import './base/reset';
+@import './home/home-header';
+@import './home/choose-genre';
+@import './home/home-body';
+@import './footer/footer';
+@import './modal/film-modal';
+@import './modal/team-modal';
+@import './my-library/my-library-header';
+@import './my-library/my-library-watched-body';
+@import './film-card';
+@import './loader-and-scroll/loader.scss';
+@import './loader-and-scroll/scroll.scss';
