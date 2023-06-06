@@ -5,7 +5,7 @@
   "homepage": "https://Lupushor.github.io/filmoteka",
   "scripts": {
     "start": "parcel src/*.html --port 4040",
-    "build": "parcel build src/*.html --public-url /filmoteka_js_adaptive_1280px_768px_320px/"
+    "build": "parcel build src/*.html --public-url /filmoteka/"
   },
   "repository": {
     "type": "git",
